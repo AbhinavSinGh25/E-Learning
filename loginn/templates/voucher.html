@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Voucher Redemption System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    .voucher-image {
+        margin-top: 25px;
+    }
+
+    h1 {
+        font-size: 36px;
+        text-align: center;
+        margin: 40px 0;
+        color: #333;
+    }
+
+    /* Style the voucher list */
+    .voucher-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Style each voucher item */
+    .voucher {
+        display: flex;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+
+    /* Style the voucher image */
+    .voucher-image img {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px 0 0 5px;
+    }
+
+    .code {
+        font-size: 20px;
+        ;
+    }
+
+    /* Style the voucher details */
+    .voucher-details {
+        flex: 1;
+        padding: 20px;
+    }
+
+    /* Style the voucher title */
+    .voucher-details h2 {
+        font-size: 24px;
+        margin: 0;
+        color: #333;
+    }
+
+    /* Style the voucher code */
+    .voucher-details .code {
+        font-family: monospace;
+        background-color: #f7f7f7;
+        padding: 3px 6px;
+        border-radius: 3px;
+    }
+
+    /* Style the button */
+    .btn-avail {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-avail:hover {
+        background-color: #3e8e41;
+    }
+
+    p {
+        font-size: 20px;
+    }
+
+    /* Style the voucher list container */
+    .voucher-list-container {
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Style the voucher status message */
+    #voucher-status {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 20px;
+        color: #333;
+    }
+</style>
+
+<body>
+    <h1>VOUCHER REDEMPTION </h1>
+
+    <p style="font-size: 30px;">Choose a voucher below to redeem:</p>
+
+    <ul class="voucher-list">
+        <li>
+            <div class="voucher">
+                <div class="voucher-image">
+                    {% load static %}<img src="{% static 'images/netflix.png' %}" alt="Voucher Image">
+                </div>
+                <div class="voucher-details">
+                    <h2>NETFLIX: 1 month Membership</h2>
+                    <p>Coins Required: <span class="code">350</span> </p>
+                    <button id="availButton" class="btn-avail" data-required-coins="350"
+                        data-available-coins="{{ total_coins }}">Avail Voucher</button>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="voucher">
+                <div class="voucher-image">
+                    {% load static %}<img src="{% static 'images/amazon.png' %}" alt="Voucher Image">
+                </div>
+                <div class="voucher-details">
+                    <h2>Amazon: 30% off on order above Rs.2500</h2>
+                    <p>Use code <span class="code">30OFF</span></p>
+                    <p>Coins Required: <span class="code">80</span> </p>
+                    <button id="availButton" class="btn-avail" data-required-coins="80"
+                        data-available-coins="{{ total_coins }}">Avail Voucher</button>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <div id="voucher-status">
+        <!-- This is where the status of the voucher redemption will be displayed -->
+    </div>
+
+    <script>
+        const availButtons = document.querySelectorAll('.btn-avail');
+        var user_id = "{{ login_id }}";
+
+        // Loop through each button and add a click event listener
+        availButtons.forEach(function (availButton) {
+            availButton.addEventListener('click', function () {
+                const requiredCoins = Number(availButton.getAttribute('data-required-coins'));
+                const availableCoins = Number(availButton.getAttribute('data-available-coins'));
+
+                if (availableCoins < requiredCoins) {
+                    alert('Not enough coins available!');
+                } else {
+                    availButton.innerText = 'Availed';
+                    availButton.disabled = true;
+                    availButton.style.backgroundColor="white";
+
+                    // Send an AJAX request to update the user's coins in the database
+                    var xhr = new XMLHttpRequest();
+                    var url = "/elearning/update_coins/";
+                    var params = {
+                        user_id: user_id,
+                        required_coins: requiredCoins
+                    }
+                    xhr.open("POST", url, true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            console.log(xhr.responseText);
+                        }
+                    };
+                    console.log("sending....")
+                    xhr.send(JSON.stringify(params));
+                }
+            });
+        });    </script>
+
+</body>
+
+</html>

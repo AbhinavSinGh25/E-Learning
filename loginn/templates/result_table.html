@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 40%;
+        height: 290px;
+    }
+    
+    th, td {
+        text-align: left;
+        padding: 8px;
+        text-align: center;
+    }
+    
+    th {
+        background-color: #ddd;
+    }
+    
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    
+    a {
+        text-decoration: none;
+        color: #333;
+    }
+    
+    a:hover {
+        color: blue;
+    }
+    #result{
+        margin-top: 230px;
+    }
+</style>
+<body>
+<center>
+    <div id="result">
+    <h1>RESULTS</h1>
+    <table border="1px">
+        <tr><th>ID</th><th>NAME</th><th>SCORE</th><th>TIME(in sec)</th><th>Total Coins</th></tr>
+        {% for i in results %}
+        <tr><td><a href="">{{ i.stu_id.id }}</a></td>
+            <td>{{ i.stu_id.firstname }}</td>
+            <td>{{ i.q_score }}</td>
+            <td>{{ i.q_time }}</td>
+            <td>{{ i.stu_id.coins }}</td>
+        </tr>
+        {% empty %}
+      <tr>
+        <td colspan="3">No results found.</td>
+      </tr>
+        {% endfor%}
+        
+    </table>
+ <br><br>
+    <form id="reward-form" method="POST" action="{% url 'reward' %}">
+        {% csrf_token %}
+        <button id="reward-btn" type="submit" {% if disable_button %}disabled{% endif %}>Reward Top Scorers</button>
+    </form>
+    <script>
+
+        var rewardBtn = document.getElementById("reward-btn");
+    
+
+        document.getElementById("reward-form").addEventListener("submit", function() {
+            rewardBtn.disabled = true;
+        });
+    </script>
+</div>
+</center>
+</body>
+</html>

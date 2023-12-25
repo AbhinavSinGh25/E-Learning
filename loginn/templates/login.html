@@ -1,0 +1,91 @@
+<html>
+<head> <title> Log In</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Set the CSRF token in AJAX requests -->
+    <script type="text/javascript">
+      $(document).ready(function () {
+        // Get the CSRF token
+        const csrf_token = "{{ csrf_token }}";
+  
+        // Set the CSRF token header in AJAX requests
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+            }
+        });
+      });
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body{
+            margin:50px 80px;
+            
+        }
+        form{
+            margin-left:37%;
+            margin-top:10%;
+            padding:10px;
+            box-shadow: 0 0 2px 0.5px #790707 ;
+            border-radius: 10px;
+            width: 27%;
+            
+        }
+        hr{
+            border-color: #ac1313;
+        }
+        input[type=email],input[type=password]{
+            padding:10px;
+            border:2px;
+            border-radius: 10px;
+            width: 100%;
+            
+           
+        }
+        input:focus{
+            outline: none;      
+            box-shadow: 0 0 0 1px rgb(187, 12, 12); 
+            
+          }
+
+        input[type=submit]{
+            appearance: none;
+            padding:10px;
+            border: none;
+            background-color: #a02121;
+            color: white;
+            font-weight: 600;
+            border-radius: 5px;
+            width:100%;
+        }
+        
+    </style></head>
+    <body>
+        
+        
+        <form  action="" method="post" >
+        {% csrf_token %}
+        <h2> <center>Log In</center></h2><hr>
+        <label for="Username"> Email:</label><br><br>
+        <input name="uname" type="email" placeholder="Enter your email" required><br><br>
+    <label for="passsword"> Password: </label><br><br>
+        <input name="password" type="password" placeholder="Enter your password" required> <br><br>
+        {% if message %}
+    <p class="error">{{ message }}</p>
+    {% endif %}
+        <a href="{% url 'forgot_password' %}"> <center>Forgot passsword?</center></a>
+        <br>
+        
+
+        <input type="submit" value="Login">
+        <br><br>
+       <center> Not a member? <a href="{% url 'signup' %}"> Signup now</a></center>
+       </form>
+
+    </body>    
+</html>

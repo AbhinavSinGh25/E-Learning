@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .course img {
+        width: 100%;
+    }
+
+    .btn {
+        display: inline-block;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+        text-decoration: none;
+    }
+
+    .btn:hover {
+        background-color: #444;
+    }
+
+    .course {
+        flex-basis: calc(25% - 20px);
+        background-color: #f2f2f2;
+        padding: 20px;
+        margin-bottom: 20px;
+        height:500px;
+    }
+
+    #courses {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 170px;
+    }
+    .icon-img{
+        height: 370px;
+
+    }
+</style>
+
+<body>
+    <center><h1>ADMIN PORTAL</h1></center>
+    <section id="courses">
+        <div class="course">
+            <center><h2>NOTES UPLOADED</h2></center>
+        <a href="">{% load static %}<img src="{% static 'images/notes.jpeg' %}" class="icon-img"alt="Course 1"></a>
+
+            
+        </div>
+        <div class="course">
+            <center><h2>ADD QUIZ</h2></center>
+          <a href="{% url 'add' %}">{% load static %}<img src="{% static 'images/add quiz.png' %}" class="icon-img" alt="Course 1"></a>
+        
+        </div>
+        <div class="course">
+            <center><h2>VIEW RESULTS</h2></center>
+          <a href="{% url 'quiz_list_admin' %}">{% load static %}<img src="{% static 'images/view result.jpg' %}" class="icon-img" alt="Course 1"></a>
+        
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>E-Learning Home Page</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="static/css/home.css">
+</head>
+<style>
+	* {
+		box-sizing: border-box;
+	}
+	
+	body {
+		font-family: Arial, sans-serif;
+		margin: 0;
+		padding: 0;
+	}
+	
+	header {
+		background-color: #333;
+		color: #fff;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px 20px;
+	}
+	
+	nav ul {
+		list-style: none;
+		display: flex;
+	}
+	
+	nav li {
+		margin: 0 10px;
+	}
+	
+	nav a {
+		color: #fff;
+		text-decoration:none;
+		font-size: 20px;
+	}
+	
+	nav a:hover {
+	text-decoration: underline;
+	}
+	
+	main {
+	margin: 20px;
+	}
+	
+	#hero {
+	background-color: #f2f2f2;
+	padding: 50px;
+	text-align: center;
+	}
+	
+	#courses {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin-top: 30px;
+	}
+	
+	.course {
+	flex-basis: calc(25% - 20px);
+	background-color: #f2f2f2;
+	padding: 20px;
+	margin-bottom: 20px;
+	}
+	.login-btn{
+
+		background-color: white;
+		color: black;
+		padding: 10px 20px;
+		border-radius: 5px;
+		margin-top: 20px;
+		text-decoration: none;
+		font-weight:bold;
+	}
+	.course img {
+	width: 100%;
+	}
+	
+	.btn {
+	display: inline-block;
+	background-color: #333;
+	color: #fff;
+	padding: 10px 20px;
+	border-radius: 5px;
+	margin-top: 20px;
+	text-decoration: none;
+	}
+	
+	.btn:hover {
+	background-color: #444;
+	}
+	
+	footer {
+	background-color: #333;
+	color: #fff;
+	padding: 20px;
+	text-align: center;
+	}
+	
+	
+</style>
+<body>
+	<header>
+		<h1>E-Learning Website</h1>
+		<nav>
+			<ul>
+				<li><a href="#">Home</a></li>
+				<li><a href="#">Courses</a></li>
+				<li><a href="#">About Us</a></li>
+				<li><a href="#">Contact Us</a></li>
+				<li><a href="{% url 'login' %}" class="login-btn">LOGIN</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<section id="hero">
+			<h2>Welcome to E-Learning Website</h2>
+			<p>Our mission is to provide high-quality online education to students all over the world. Our courses are designed by experts in the field and are constantly updated to keep up with the latest developments.</p>
+			<a href="#" class="btn">Get Started</a>
+		</section>
+
+		<h3>Popular Courses</h3>
+		<section id="courses">
+			<div class="course">
+				<img src="course1.jpg" alt="Course 1">
+				<h4>Course 1 Title</h4>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id erat in ipsum facilisis fringilla sed nec nisi. In hac habitasse platea dictumst.</p>
+				<a href="course1" class="btn">Learn More</a>
+			</div>
+			<div class="course">
+				<img src="course2.jpg" alt="Course 2">
+				<h4>Course 2 Title</h4>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id erat in ipsum facilisis fringilla sed nec nisi. In hac habitasse platea dictumst.</p>
+				<a href="#" class="btn">Learn More</a>
+			</div>
+			<div class="course">
+				<img src="course3.jpg" alt="Course 3">
+				<h4>Course 3 Title</h4>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id erat in ipsum facilisis fringilla sed nec nisi. In hac habitasse platea dictumst.</p>
+				<a href="#" class="btn">Learn More</a>
+			</div>
+		</section>
+	</main>
+
+	<footer>
+		<p>&copy; 2023 E-Learning Website. All rights reserved.</p>
+	</footer>
+</body>
+</html>

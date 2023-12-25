@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ login_id }}</title>
+		{% with question=quiz %}
+		<script> 
+			var currentQuestion = 0;
+			var quizOver = false;
+			var score = 0;
+			var seconds = 10;
+			var timer;
+			var total_quiz_time=0;
+			var questions = [
+				{
+					question: "{{ question.q1 }}",
+					answers: [
+						"{{ question.op1_1 }}",
+						"{{ question.op2_1 }}",
+						"{{ question.op3_1 }}",
+						"{{ question.op4_1 }}",
+						
+					],
+					correctAnswer: parseInt("{{ question.ans_1 }}") - 1
+				},
+				{
+					question: "{{ question.q2 }}",
+					answers: [
+						"{{ question.op1_2 }}",
+						"{{ question.op2_2 }}",
+						"{{ question.op3_2 }}",
+						"{{ question.op4_2 }}"
+					],
+					correctAnswer: parseInt("{{ question.ans_2 }}") - 1
+				},
+				{
+					question: "{{ question.q3 }}",
+					answers: [
+					"{{ question.op1_3 }}",
+					"{{ question.op2_3 }}",
+					"{{ question.op3_3 }}",
+					"{{ question.op4_3 }}"
+					],
+					correctAnswer: parseInt("{{ question.ans_3 }}") - 1
+				}
+			];
+			
+			function displayCurrentQuestion() {
+				var question = questions[currentQuestion].question;
+				var answers = questions[currentQuestion].answers;
+			
+				document.getElementById("question").innerHTML = question;
+			
+				var answerHTML = "";
+				for (var i = 0; i < answers.length; i++) {
+					answerHTML += '<input type="radio" name="answer" value="' + i + '">' + answers[i] + '<br>';
+				}
+			
+				document.getElementById("answers").innerHTML = answerHTML;
+			
+				var timerDisplay = document.getElementById("timer");
+				timerDisplay.innerHTML = "Time Remaining: " + seconds + " seconds";
+				timer = setInterval(function() {
+					total_quiz_time++;
+					seconds--;
+					timerDisplay.innerHTML = "Time Remaining: " + seconds + " seconds";
+					if (seconds <= 0) {
+						clearInterval(timer);
+						currentQuestion++;
+			
+						if (currentQuestion < questions.length) {
+							seconds = 10;
+							displayCurrentQuestion();
+						}
+						else {
+							quizOver = true;
+							document.getElementById("question").innerHTML = "Quiz Over!";
+							document.getElementById("answers").innerHTML = "";
+							document.getElementById("submit").style.display = "none";
+							showScore();
+						}
+					}
+				}, 1000);
+			}
+			
+			function showScore() {
+				clearInterval(timer); // Stop the timer
+				 // Calculate total time taken -->
+				var scoreHTML = "Your Score: " + score + " out of " + questions.length;
+				var timeHTML = "Total Time: " + total_quiz_time + " seconds";
+				document.getElementById("question").innerHTML = scoreHTML + "<br>" + timeHTML;
+			
+				// Send score and totalTime using Ajax
+				var xhr = new XMLHttpRequest();
+				var url = "/elearning/quizView/";
+				var params = {
+					score: score,
+					total_quiz_time: total_quiz_time
+				};
+				xhr.open("POST", url, true);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						console.log(xhr.responseText);
+					}
+				};
+				console.log("sending....")
+				xhr.send(JSON.stringify(params));
+			}
+			
+			
+			
+			window.onload = function () {
+				displayCurrentQuestion();
+			
+				document.getElementById("submit").onclick = function () {
+					if (quizOver) {
+						return;
+					}
+			
+					var answerInputs = document.getElementsByName("answer");
+					var selectedAnswer = -1;
+					for (var i = 0; i < answerInputs.length; i++) {
+						if (answerInputs[i].checked) {
+							selectedAnswer = answerInputs[i].value;
+							break;
+						}
+					}
+			
+					if (selectedAnswer == -1) {
+						alert("Please select an answer.");
+						return;
+					}
+			
+					if (selectedAnswer == questions[currentQuestion].correctAnswer) {
+						score++;
+					}
+			
+					clearInterval(timer);
+			
+					currentQuestion++;
+			
+					if (currentQuestion < questions.length) {
+						seconds = 10;
+						displayCurrentQuestion();
+					}
+					else {
+						quizOver = true;
+						document.getElementById("question").innerHTML = "Quiz Over!";
+						document.getElementById("answers").innerHTML = "";
+						document.getElementById("submit").style.display = "none";
+						showScore();
+					}
+				}
+			}
+			
+
+		</script>
+		{% endwith %}
+<style>
+	body {
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		background-color: #f2f2f2;
+	}
+	
+	h2 {
+		font-size: 28px;
+		margin: 0;
+		margin-bottom: 20px;
+		text-align: center;
+	}
+	
+	#timer {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		font-size: 18px;
+	}
+	
+	button {
+		margin-top: 20px;
+		padding: 10px 20px;
+		border: none;
+		border-radius: 5px;
+		background-color: #ac1313;
+		color: #fff;
+		font-size: 18px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
+	
+	input[type="radio"] {
+		margin-right: 10px;
+	}
+	
+	#quiz {
+		background-color: #fff;
+		border-radius: 5px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		max-width: 500px;
+		margin-top: 10%;
+		margin-left: 30%;
+		padding: 20px;
+		font-size: 16px;
+	}
+	#quiz button:hover {
+		background-color: #ac1313;
+	
+	}	
+	
+</style>
+	</head>
+	<body>
+		
+		<div id="quiz">
+			
+			<h2 id="question"></h2>
+			<div id="answers"></div>
+			<div id="timer"></div>
+			<div id="total-timer"></div>
+			<center><button id="submit">SUBMIT</button></center>
+		</div>
+		
+	</body>
+</html>
